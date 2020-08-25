@@ -1,0 +1,44 @@
+In the section on Variables we saw that we could save the output of a command easily to a variable. It turns out that this mechanism is also able to do basic arithmetic for us if we tweak the syntax a little. We do so by using double brackets like so:
+
+$(( expression ))
+
+Here's an example to illustrate:
+expansion_example.sh
+
+    #!/bin/bash
+    # Basic arithmetic using double parentheses
+    a=$(( 4 + 5 ))
+    echo $a # 9
+    a=$((3+5))
+    echo $a # 8
+    b=$(( a + 3 ))
+    echo $b # 11
+    b=$(( $a + 4 ))
+    echo $b # 12
+    (( b++ ))
+    echo $b # 13
+    (( b += 3 ))
+    echo $b # 16
+    a=$(( 4 * 5 ))
+    echo $a # 20
+
+Let's break it down:
+
+    Line 4 - This is the basic format. As you can see we may space it out nicely for readability without the need for quotes.
+    Line 7 - As you can see, it works just the same if we take spacing out.
+    Line 10 - We may include variables without the preceding $ sign.
+    Line 13 - Variables can be included with the $ sign if you prefer.
+    Line 16 - This is a slightly different form. Here the value of the variable b is incremented by 1 (using the same mechanism illustrated under let). When we do this we don't need the $ sign preceding the brackets.
+    Line 19 - This is a slightly different form of the previous example. Here the value of the variable b is incremented by 3. It is a shorthand for b = b + 3.
+    Line 19 - Unlike other methods, when we do multiplication we don't need to escape the * sign.
+
+    ./expansion_example.sh
+    9
+    8
+    11
+    12
+    13
+    16
+    20
+
+So as you can see double parenthese is quite flexible in how you format it's expression. This is part of why we prefer this method. As double parentheses is builtin to Bash it also runs slighly more efficiently (though to be honest, with the raw computing power of machines these days the difference in performance is really insignificant).

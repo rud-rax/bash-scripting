@@ -1,0 +1,230 @@
+A basic if statement effectively says, if a particular test is true, then perform a given set of actions. If it is not true then don't perform those actions. If follows the format below:
+
+if [ <some test> ]
+then
+<commands>
+fi
+
+Anything between then and fi (if backwards) will be executed only if the test (between the square brackets) is true.
+
+Let's look at a simple example:
+if_example.sh
+
+    #!/bin/bash
+    # Basic if statement
+    if [ $1 -gt 100 ]
+    then
+    echo Hey that\'s a large number.
+    pwd
+    fi
+    date
+
+Let's break it down:
+
+    Line 4 - Let's see if the first command line argument is greater than 100
+    Line 6 and 7 - Will only get run if the test on line 4 returns true. You can have as many commands here as you like.
+    Line 6 - The backslash ( \ ) in front of the single quote ( ' ) is needed as the single quote has a special meaning for bash and we don't want that special meaning. The backslash escapes the special meaning to make it a normal plain single quote again.
+    Line 8 - fi signals the end of the if statement. All commands after this will be run as normal.
+    Line 10 - Because this command is outside the if statement it will be run regardless of the outcome of the if statement.
+
+    ./if_example.sh 15
+    Tue 18 Aug 13:39:27 2020
+    ./if_example.sh 150
+    Hey that's a large number.
+    /home/ryan/bin
+    Tue 18 Aug 13:39:27 2020
+
+
+    The square brackets ( [ ] ) in the if statement above are actually a reference to the command test. This means that all of the operators that test allows may be used here as well. Look up the man page for test to see all of the possible operators (there are quite a few) but some of the more common ones are listed below.
+    Operator 	Description
+    ! EXPRESSION 	The EXPRESSION is false.
+    -n STRING 	The length of STRING is greater than zero.
+    -z STRING 	The lengh of STRING is zero (ie it is empty).
+    STRING1 = STRING2 	STRING1 is equal to STRING2
+    STRING1 != STRING2 	STRING1 is not equal to STRING2
+    INTEGER1 -eq INTEGER2 	INTEGER1 is numerically equal to INTEGER2
+    INTEGER1 -gt INTEGER2 	INTEGER1 is numerically greater than INTEGER2
+    INTEGER1 -lt INTEGER2 	INTEGER1 is numerically less than INTEGER2
+    -d FILE 	FILE exists and is a directory.
+    -e FILE 	FILE exists.
+    -r FILE 	FILE exists and the read permission is granted.
+    -s FILE 	FILE exists and it's size is greater than zero (ie. it is not empty).
+    -w FILE 	FILE exists and the write permission is granted.
+    -x FILE 	FILE exists and the execute permission is granted.
+
+    A few points to note:
+
+        = is slightly different to -eq. [ 001 = 1 ] will return false as = does a string comparison (ie. character for character the same) whereas -eq does a numerical comparison meaning [ 001 -eq 1 ] will return true.
+        When we refer to FILE above we are actually meaning a path. Remember that a path may be absolute or relative and may refer to a file or a directory.
+        Because [ ] is just a reference to the command test we may experiment and trouble shoot with test on the command line to make sure our understanding of its behaviour is correct.
+
+        test 001 = 1
+        echo $?
+        1
+        test 001 -eq 1
+        echo $?
+        0
+        touch myfile
+        test -s myfile
+        echo $?
+        1
+        ls /etc > myfile
+        test -s myfile
+        echo $?
+        0
+
+    Let's break it down:
+
+        Line 1 - Perform a string based comparison. Test doesn't print the result so instead we check it's exit status which is what we will do on the next line.
+        Line 2 - The variable $? holds the exit status of the previously run command (in this case test). 0 means TRUE (or success). 1 = FALSE (or failure).
+        Line 4 - This time we are performing a numerical comparison.
+        Line 7 - Create a new blank file myfile (assuming that myfile doesn't already exist).
+        Line 8 - Is the size of myfile greater than zero?
+        Line 11 - Redirect some content into myfile so it's size is greater than zero.
+        Line 12 - Test the size of myfile again. This time it is TRUE.
+        The square brackets ( [ ] ) in the if statement above are actually a reference to the command test. This means that all of the operators that test allows may be used here as well. Look up the man page for test to see all of the possible operators (there are quite a few) but some of the more common ones are listed below.
+        Operator 	Description
+        ! EXPRESSION 	The EXPRESSION is false.
+        -n STRING 	The length of STRING is greater than zero.
+        -z STRING 	The lengh of STRING is zero (ie it is empty).
+        STRING1 = STRING2 	STRING1 is equal to STRING2
+        STRING1 != STRING2 	STRING1 is not equal to STRING2
+        INTEGER1 -eq INTEGER2 	INTEGER1 is numerically equal to INTEGER2
+        INTEGER1 -gt INTEGER2 	INTEGER1 is numerically greater than INTEGER2
+        INTEGER1 -lt INTEGER2 	INTEGER1 is numerically less than INTEGER2
+        -d FILE 	FILE exists and is a directory.
+        -e FILE 	FILE exists.
+        -r FILE 	FILE exists and the read permission is granted.
+        -s FILE 	FILE exists and it's size is greater than zero (ie. it is not empty).
+        -w FILE 	FILE exists and the write permission is granted.
+        -x FILE 	FILE exists and the execute permission is granted.
+
+        A few points to note:
+
+            = is slightly different to -eq. [ 001 = 1 ] will return false as = does a string comparison (ie. character for character the same) whereas -eq does a numerical comparison meaning [ 001 -eq 1 ] will return true.
+            When we refer to FILE above we are actually meaning a path. Remember that a path may be absolute or relative and may refer to a file or a directory.
+            Because [ ] is just a reference to the command test we may experiment and trouble shoot with test on the command line to make sure our understanding of its behaviour is correct.
+
+            test 001 = 1
+            echo $?
+            1
+            test 001 -eq 1
+            echo $?
+            0
+            touch myfile
+            test -s myfile
+            echo $?
+            1
+            ls /etc > myfile
+            test -s myfile
+            echo $?
+            0
+
+        Let's break it down:
+
+            Line 1 - Perform a string based comparison. Test doesn't print the result so instead we check it's exit status which is what we will do on the next line.
+            Line 2 - The variable $? holds the exit status of the previously run command (in this case test). 0 means TRUE (or success). 1 = FALSE (or failure).
+            Line 4 - This time we are performing a numerical comparison.
+            Line 7 - Create a new blank file myfile (assuming that myfile doesn't already exist).
+            Line 8 - Is the size of myfile greater than zero?
+            Line 11 - Redirect some content into myfile so it's size is greater than zero.
+            Line 12 - Test the size of myfile again. This time it is TRUE.
+
+
+
+                #!/bin/bash
+                # Nested if statements
+                if [ $1 -gt 100 ]
+                then
+                echo Hey that\'s a large number.
+                if (( $1 % 2 == 0 ))
+                then
+                echo And is also an even number.
+                fi
+                fi
+
+
+                Sometimes we want to perform a certain set of actions if a statement is true, and another set of actions if it is false. We can accommodate this with the else mechanism.
+
+                if [ <some test> ]
+                then
+                <commands>
+                else
+                <other commands>
+                fi
+
+
+                Sometimes we may have a series of conditions that may lead to different paths.
+
+                if [ <some test> ]
+                then
+                <commands>
+                elif [ <some test> ]
+                then
+                <different commands>
+                else
+                <other commands>
+                fi
+
+
+Sometimes we only want to do something if multiple conditions are met. Other times we would like to perform the action if one of several condition is met. We can accommodate these with boolean operators.
+
+    and - &&
+    or - ||
+
+For instance maybe we only want to perform an operation if the file is readable and has a size greater than zero.
+and.sh
+
+    #!/bin/bash
+    # and example
+    if [ -r $1 ] && [ -s $1 ]
+    then
+    echo This file is useful.
+    fi
+
+
+    Sometimes we may wish to take different paths based upon a variable matching a series of patterns. We could use a series of if and elif statements but that would soon grow to be unweildly. Fortunately there is a case statement which can make things cleaner. It's a little hard to explain so here are some examples to illustrate:
+
+    case <variable> in
+    <pattern 1>)
+    <commands>
+    ;;
+    <pattern 2>)
+    <other commands>
+    ;;
+    esac
+
+    Here is a basic example:
+    case.sh
+
+        #!/bin/bash
+        # case example
+        case $1 in
+        start)
+        echo starting
+        ;;
+        stop)
+        echo stoping
+        ;;
+        restart)
+        echo restarting
+        ;;
+        *)
+        echo don\'t know
+        ;;
+        esac
+
+    Let's break it down:
+
+        Line 4 - This line begins the casemechanism.
+        Line 5 - If $1 is equal to 'start' then perform the subsequent actions. the ) signifies the end of the pattern.
+        Line 7 - We identify the end of this set of statements with a double semi-colon ( ;; ). Following this is the next case to consider.
+        Line 14 - Remember that the test for each case is a pattern. The * represents any number of any character. It is essentialy a catch all if for if none of the other cases match. It is not necessary but is often used.
+        Line 17 - esac is case backwards and indicates we are at the end of the case statement. Any other statements after this will be executed normally.
+
+        ./case.sh start
+        starting
+        ./case.sh restart
+        restarting
+        ./case.sh blah
+        don't know

@@ -1,0 +1,42 @@
+let is a builtin function of Bash that allows us to do simple arithmetic. It follows the basic format:
+
+let <arithmetic expression>
+
+The arithmetic expression can take a variety of formats which we'll outline below. The first part is generally always a variable which the result is saved into however.
+
+Let's look at a simple example:
+let_example.sh
+
+    #!/bin/bash
+    # Basic arithmetic using let
+    let a=5+4
+    echo $a # 9
+    let "a = 5 + 4"
+    echo $a # 9
+    let a++
+    echo $a # 10
+    let "a = 4 * 5"
+    echo $a # 20
+    let "a = $1 + 30"
+    echo $a # 30 + first command line argument
+
+Let's break it down:
+
+    Line 4 - This is the basic format. Note that if we don't put quotes around the expression then it must be written with no spaces.
+    Line 7 - This time we have used quotes which allow us to space out the expression to make it more readable.
+    Line 10 - This is a shorthand for increment the value of the variable a by 1. It is the same as writing "a = a + 1".
+    Line 16 - We may also include other variables in the expression.
+
+    ./let_example.sh 15
+    9
+    9
+    10
+    20
+    45
+
+Here is a table with some of the basic expressions you may perform. There are others but these are the most commonly used.
+Operator 	Operation
++, -, \*, / 	addition, subtraction, multiply, divide
+var++ 	Increase the variable var by 1
+var-- 	Decrease the variable var by 1
+% 	Modulus (Return the remainder after division)
